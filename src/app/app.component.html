@@ -1,23 +1,45 @@
-<select [(ngModel)]="selectedFrom">
-    <option *ngFor="let currency of currencies" value="{{currency.id}}">{{currency.name}}</option>
-</select>
-<select [(ngModel)]="selectedTo">
-    <option *ngFor="let currency of currencies" value="{{currency.id}}">{{currency.name}}</option>
-</select>
-
-<input [(ngModel)]="amount" />
-<button (click)="getConversion()">Go convert!</button>
+<div>
+    <select [(ngModel)]="selectedFrom">
+        <option *ngFor="let currency of currencies$ | async" value="{{currency.id}}">{{currency.name}}</option>
+    </select>
+    <select [(ngModel)]="selectedTo">
+        <option *ngFor="let currency of currencies$ | async" value="{{currency.id}}">{{currency.name}}</option>
+    </select>
+    <input [(ngModel)]="amount" />
+</div>
+<div>
+    <button (click)="getNewConversion()">Go convert!</button>
+    <button (click)="getNewStatistics()">Go statistics!</button>
+</div>
 <div>
     <p>RESULT: {{resultAmount}}</p>
 </div>
 
-<button (click)="getPrevOpeartions()">Prev</button>
-<button (click)="getNextOpeartions()">Next</button>
 <hr />
-<ul>
-    <li *ngFor="let op of operations">
-        <p>{{op.pair.fromCurrency.name}} ===> {{op.pair.toCurrency.name}}</p>
-        <p>{{op.fromAmount}} ===> {{op.toAmount}}</p>
-        <p>{{op.date}}</p>
-    </li>
-</ul>
+
+<div>
+
+    <select (change)="setNewSize()" [(ngModel)]="size">
+        <option value='4'>4</option>
+        <option value='8'>8</option>
+    </select>
+    <div *ngIf="(!(operations$ | async))">
+        <button (click)="getOpeartions()">Get operations</button>
+    </div>
+    <div *ngIf="(operations$ | async)?.length==0">
+        <button (click)="getOpeartions()">Go to 0 page</button>
+    </div>
+    <div *ngIf="(operations$ | async)?.length>0">
+        <button (click)="getPrevOpeartions()">Prev</button>
+        <button (click)="getNextOpeartions()">Next</button>
+    </div>
+
+    <ul>
+        <li *ngFor="let op of operations$ | async">
+            <p>{{op.pair.fromCurrency.name}} ===> {{op.pair.toCurrency.name}}</p>
+            <p>{{op.fromAmount}} ===> {{op.toAmount}}</p>
+            <p>{{op.date}}</p>
+        </li>
+    </ul>
+
+</div>

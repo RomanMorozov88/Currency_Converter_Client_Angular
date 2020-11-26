@@ -1,6 +1,6 @@
 import { CurrencyCC } from './CurrencyCC';
 
-export interface CurrencyPair {
+export interface CurrencyPairCC {
     fromCurrency: CurrencyCC;
     toCurrency: CurrencyCC;
 }

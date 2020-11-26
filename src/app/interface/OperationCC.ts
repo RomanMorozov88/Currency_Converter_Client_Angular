@@ -1,7 +1,7 @@
-import { CurrencyPair } from './CurrencyPairCC';
+import { CurrencyPairCC } from './CurrencyPairCC';
 
 export interface OperationCC {
-    pair: CurrencyPair;
+    pair: CurrencyPairCC;
     date: string;
     fromAmount: number
     toAmount: number;

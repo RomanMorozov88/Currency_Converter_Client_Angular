@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 
-export const READ_INFOS = gql`{
+export const READ_INFOS = gql`
+query {
     getAllCurrencyInfo {
       id
       name
@@ -8,12 +9,12 @@ export const READ_INFOS = gql`{
   }`;
 
 export const GET_CONVERSION = gql` 
-query ($fromId: String!, $toId: String!, $amount: Float!){
+mutation ($fromId: String!, $toId: String!, $amount: Float!) {
     getCurrencyConversion(fromId: $fromId, toId: $toId, amount: $amount)
   }`;
 
 export const GET_OPERATIONS = gql` 
-query ($page: Int, $size: Int){
+query ($page: Int!, $size: Int!) {
     getOperations(page: $page, size: $size) {
         pair {
             fromCurrency {
@@ -28,3 +29,20 @@ query ($page: Int, $size: Int){
 	    date
     }
   }`;
+
+export const GET_STATISTICS = gql`
+query ($fromId: String!, $toId: String!) {
+  getStatistics (fromId: $fromId, toId: $toId) {
+    pair {
+      fromCurrency {
+          name
+        }
+      toCurrency {
+          name
+        }
+      }
+    averageRate
+    totalSumFrom
+    totalSumTo
+  }
+}`;

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from "apollo-angular";
+import { Observable } from "rxjs";
 import { CurrencyCC } from './interface/CurrencyCC'
-
-import * as Query from './global-query';
 import { OperationCC } from './interface/OperationCC';
+import { QueryService } from './service/query.service';
+import { MutationService } from './service/mutation.service';
+import { StatisticsCC } from './interface/StatisticsCC';
 
 @Component({
   selector: 'app-root',
@@ -12,86 +13,53 @@ import { OperationCC } from './interface/OperationCC';
 })
 export class AppComponent implements OnInit {
 
-  operations: OperationCC[] = [];
-  currencies: CurrencyCC[] = [];
-  amount: number = 0;
+  currencies$: Observable<CurrencyCC[]>;
+  operations$: Observable<OperationCC[]>;
+  statistics: StatisticsCC;
+  amount: number;
   selectedFrom: string;
   selectedTo: string;
   resultAmount: number;
-  page: number = 0;
   size: number = 4;
 
-  constructor(private apollo: Apollo) { }
+  constructor(
+    private queryService: QueryService,
+    private mutationService: MutationService
+  ) { }
 
   ngOnInit() {
-    this.getAllCurrencies();
+    this.currencies$ = this.queryService.getAllCurrenciesFromServer();
   }
 
-  getAllCurrencies() {
-    this.apollo
-      .watchQuery<any>({
-        query: Query.READ_INFOS,
-      })
-      .valueChanges
-      .subscribe(({ data }) => {
-        this.currencies = data.getAllCurrencyInfo;
-      });
+  setNewSize() {
+    this.queryService.setSize(this.size);
   }
 
   getNextOpeartions() {
-    if (this.operations.length > 0) {
-      this.page++;
-    }
-    this.getOperations(this.page, this.size);
+    this.operations$ = this.queryService.getNextOpeartions();
   }
 
   getPrevOpeartions() {
-    if (this.page > 0) {
-      this.page--;
-    }
-    this.getOperations(this.page, this.size);
+    this.operations$ = this.queryService.getPrevOpeartions();
   }
 
-  getOperations(page: number, size: number) {
-    this.apollo
-      .watchQuery<any>({
-        query: Query.GET_OPERATIONS,
-        variables: {
-          page: this.page,
-          size: this.size
-        }
-      })
-      .valueChanges
-      .subscribe(({ data }) => {
-        this.operations = data.getOperations;
-      });
+  getOpeartions() {
+    this.operations$ = this.queryService.getOpeartions();
   }
 
-  getConversion() {
-    if (
-      this.selectedFrom != null
-      && this.selectedTo != null
-      && this.selectedFrom != this.selectedTo
-      && this.amount > 0
-    ) {
-      this.mainConvert();
-    }
+  getNewStatistics() {
+    this.queryService.getStatisticsFromServer(
+      this.selectedFrom,
+      this.selectedTo
+    ).subscribe(({ data }) => this.statistics = data.getStatistics);
   }
 
-  private mainConvert() {
-    this.apollo
-      .watchQuery<any>({
-        query: Query.GET_CONVERSION,
-        variables: {
-          fromId: this.selectedFrom,
-          toId: this.selectedTo,
-          amount: this.amount
-        }
-      })
-      .valueChanges
-      .subscribe(({ data }) => {
-        this.resultAmount = data.getCurrencyConversion;
-      });
+  getNewConversion() {
+    this.mutationService.getConversion(
+      this.selectedFrom,
+      this.selectedTo,
+      this.amount
+    ).subscribe(({ data }) => this.resultAmount = data.getCurrencyConversion);
   }
 
 }
