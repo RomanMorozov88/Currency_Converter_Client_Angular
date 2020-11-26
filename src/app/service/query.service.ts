@@ -25,14 +25,22 @@ export class QueryService {
     }
 
     getStatisticsFromServer(fromId: string, toId: string): Observable<any> {
-        return this.apollo
-            .query<any>({
-                query: Query.GET_STATISTICS,
-                variables: {
-                    fromId: fromId,
-                    toId: toId
-                }
-            })
+        if (
+            fromId != null
+            && toId != null
+            && fromId != toId
+        ) {
+            return this.apollo
+                .query<any>({
+                    query: Query.GET_STATISTICS,
+                    variables: {
+                        fromId: fromId,
+                        toId: toId
+                    }
+                });
+        } else {
+            alert("Wrong param")
+        }
     }
 
     getNextOpeartions(): Observable<any> {
