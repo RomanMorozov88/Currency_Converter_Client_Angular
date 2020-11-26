@@ -26,16 +26,13 @@ export class QueryService {
 
     getStatisticsFromServer(fromId: string, toId: string): Observable<any> {
         return this.apollo
-            .watchQuery({
+            .query<any>({
                 query: Query.GET_STATISTICS,
                 variables: {
                     fromId: fromId,
                     toId: toId
                 }
             })
-            .valueChanges.pipe(
-                map((result: any) => result.data.getStatistics)
-            );
     }
 
     getNextOpeartions(): Observable<any> {

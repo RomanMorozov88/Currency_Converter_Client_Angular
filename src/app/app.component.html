@@ -15,6 +15,13 @@
     <p>RESULT: {{resultAmount}}</p>
 </div>
 
+<div *ngIf="(statistics)">
+    <p>STATISTICS:</p>
+    <p>{{statistics.pair.fromCurrency.name}} ===> {{statistics.pair.toCurrency.name}}</p>
+    <p>{{statistics.totalSumFrom}} ===> {{statistics.totalSumTo}}</p>
+    <p>{{statistics.averageRate}}</p>
+</div>
+
 <hr />
 
 <div>
