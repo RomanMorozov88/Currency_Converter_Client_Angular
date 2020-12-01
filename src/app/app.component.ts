@@ -5,6 +5,7 @@ import { OperationCC } from './interface/OperationCC';
 import { QueryService } from './service/query.service';
 import { MutationService } from './service/mutation.service';
 import { StatisticsCC } from './interface/StatisticsCC';
+import { ResponseResultCC } from './interface/ResponseResultCC'
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit {
   amount: number;
   selectedFrom: string;
   selectedTo: string;
-  resultAmount: number;
+  resultAmount: ResponseResultCC;
   size: number = 4;
 
   constructor(

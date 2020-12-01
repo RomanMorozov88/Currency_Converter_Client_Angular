@@ -11,8 +11,8 @@
     <button (click)="getNewConversion()">Go convert!</button>
     <button (click)="getNewStatistics()">Go statistics!</button>
 </div>
-<div>
-    <p>RESULT: {{resultAmount}}</p>
+<div *ngIf="(resultAmount)">
+    <p>RESULT: {{resultAmount.result}}</p>
 </div>
 
 <div *ngIf="(statistics)">

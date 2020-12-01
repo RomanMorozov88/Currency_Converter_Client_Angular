@@ -10,7 +10,9 @@ query {
 
 export const GET_CONVERSION = gql` 
 mutation ($fromId: String!, $toId: String!, $amount: Float!) {
-    getCurrencyConversion(fromId: $fromId, toId: $toId, amount: $amount)
+    getCurrencyConversion(fromId: $fromId, toId: $toId, amount: $amount) {
+      result
+    }
   }`;
 
 export const GET_OPERATIONS = gql` 
