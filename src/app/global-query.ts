@@ -1,18 +1,19 @@
 import gql from 'graphql-tag';
 
+export const GET_CONVERSION = gql` 
+mutation ($fromId: String!, $toId: String!, $amount: Float!) {
+    getCurrencyConversion(fromId: $fromId, toId: $toId, amount: $amount) {
+      result
+      rateDate
+    }
+  }`;
+
 export const READ_INFOS = gql`
 query {
     getAllCurrencyInfo {
       id
       name
      }
-  }`;
-
-export const GET_CONVERSION = gql` 
-mutation ($fromId: String!, $toId: String!, $amount: Float!) {
-    getCurrencyConversion(fromId: $fromId, toId: $toId, amount: $amount) {
-      result
-    }
   }`;
 
 export const GET_OPERATIONS = gql` 
